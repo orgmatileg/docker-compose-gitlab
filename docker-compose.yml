@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  gitlab:
+    container_name: gitlab
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'gitlab.example.com' # domain elu, dibawah juga ganti domain nya samain
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.example.com:8929'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+    ports:
+      - 1111:8929
+      - 2222:2222 # port ssh nya sesuaiin lu mau pake port berapa
+    volumes:
+      - type: bind
+        source: ./_DATA/gitlab/config
+        target: /etc/gitlab
+      - type: bind
+        source: ./_DATA/gitlab/logs
+        target: /var/log/gitlab
+      - type: bind
+        source: ./_DATA/gitlab/data
+        target: /var/opt/gitlab
