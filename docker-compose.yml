@@ -12,6 +12,8 @@ services:
     ports:
       - 1111:8929
       - 2222:2222 # port ssh nya sesuaiin lu mau pake port berapa
+    networks:
+      - gitlabnet
     volumes:
       - type: bind
         source: ./_DATA/gitlab/config
@@ -22,3 +24,15 @@ services:
       - type: bind
         source: ./_DATA/gitlab/data
         target: /var/opt/gitlab
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    restart: always
+    volumes:
+      - ./_DATA/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gitlabnet
+
+networks:
+  gitlabnet:
